@@ -34,9 +34,13 @@ export default function calculate(obj, buttonName) {
     }
     // If there is no operation, update next and clear the value
     if (obj.next) {
+      let nextValue = obj.next + buttonName;
+      let openRoom = nextValue == 1976;
+      console.log("OpenRoom: " + openRoom);
       return {
         next: obj.next + buttonName,
         total: null,
+        openRoom: openRoom,
       };
     }
     return {

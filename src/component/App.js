@@ -11,6 +11,7 @@ class App extends React.Component {
       total: null,
       next: null,
       operation: null,
+      openRoom: false,
     };
   }
 
@@ -21,8 +22,14 @@ class App extends React.Component {
   render() {
     return (
       <div className="component-app">
-        <Display value={this.state.next || this.state.total || "0"} />
-        <ButtonPanel clickHandler={this.handleClick} />
+        {this.state.openRoom ? (
+          <div>Room</div>
+        ) : (
+          <div>
+            <Display value={this.state.next || this.state.total || "0"} />
+            <ButtonPanel clickHandler={this.handleClick} />
+          </div>
+        )}
       </div>
     );
   }
