@@ -4,3 +4,11 @@
   flex-wrap: wrap;
   height: 100%;
 }
+
+.basic-calculator {
+  max-width: 400px;
+}
+
+.component-button {
+  min-height: 50px;
+}

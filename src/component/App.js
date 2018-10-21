@@ -21,23 +21,26 @@ class App extends Component {
     return (
       <Router>
         <div>
-          <Navbar>
+          <Navbar inverse collapseOnSelect>
             <Navbar.Header>
               <Navbar.Brand>
                 <Link to="/" className="App-logo">VariousCalculators</Link>
               </Navbar.Brand>
+              <Navbar.Toggle />
             </Navbar.Header>
-            <Nav>
-              <NavItem eventKey={1} href="/home">
-                <Link to="home" className="NavBar-Item">Home Affordability</Link>
-              </NavItem>
-              <NavItem eventKey={2} href="/car/">
-                <Link to="car" className="NavBar-Item">Car Loan</Link>
-              </NavItem>
-              <NavItem eventKey={2} href="/calculator/">
-                <Link to="calculator" className="NavBar-Item">Basic Calculator</Link>
-              </NavItem>
-            </Nav>
+            <Navbar.Collapse>
+              <Nav>
+                <NavItem eventKey={1} href="/home">
+                  <Link to="home" className="NavBar-Item">Home Affordability</Link>
+                </NavItem>
+                <NavItem eventKey={2} href="/car/">
+                  <Link to="car" className="NavBar-Item">Car Loan</Link>
+                </NavItem>
+                <NavItem eventKey={2} href="/calculator/">
+                  <Link to="calculator" className="NavBar-Item">Basic Calculator</Link>
+                </NavItem>
+              </Nav>
+            </Navbar.Collapse>
           </Navbar>
 
           <Route exact path="/" render={(props) => ( <div>main</div> )}/>

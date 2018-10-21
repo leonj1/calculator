@@ -42,7 +42,7 @@ class BasicCalculator extends Component {
           </IdleTimer>
 
         ) : (
-          <div>
+          <div className="basic-calculator">
             <Display value={this.state.next || this.state.total || "0"} />
             <ButtonPanel clickHandler={this.handleClick} />
           </div>
