@@ -18,6 +18,10 @@ class BasicCalculator extends Component {
     this.idleTimer = null;
     this.onActive = this._onActive.bind(this);
     this.onIdle = this._onIdle.bind(this);
+
+    // TODO Banner to show count down remaining time?
+    // getRemainingTime() {Number} - Returns the remaining time in milliseconds
+    // src: https://www.npmjs.com/package/react-idle-timer
   }
 
   handleClick = buttonName => {
