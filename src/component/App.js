@@ -10,6 +10,8 @@ import {
 import { submitSecret, fetchSecret, clearPastRequest } from '../redux/actions';
 import { Navbar, NavItem, Nav } from 'react-bootstrap';
 import BasicCalculator from './BasicCalculator';
+import CalculatorChoices from "./CalculatorChoices";
+import HomeAffordability from "./home/HomeAffordability";
 
 class App extends Component {
   constructor(props) {
@@ -43,10 +45,11 @@ class App extends Component {
             </Navbar.Collapse>
           </Navbar>
 
-          <Route exact path="/" render={(props) => ( <div>main</div> )}/>
-          <Route path="/home/" render={(props) => (<div>home</div> )}/>
+          <Route exact path="/" render={(props) => ( <CalculatorChoices/> )}/>
+          <Route path="/home/" render={(props) => (<HomeAffordability/> )}/>
           <Route path="/car/" render={(props) => (<div>car</div> )}/>
           <Route path="/calculator/" render={(props) => (<BasicCalculator/>)}/>
+
         </div>
       </Router>
     );
