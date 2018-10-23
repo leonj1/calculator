@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ToggleSwitch from "../ToggleSwitch";
 import { Button } from 'react-bootstrap';
 import NumericInput from 'react-numeric-input';
+import Typography from '@material-ui/core/Typography';
 import _ from 'lodash';
 
 class Settings extends Component {
@@ -64,26 +65,44 @@ class Settings extends Component {
 
   render() {
     return (
-      <div style={{padding: "10px"}}>
+      <div style={{padding: "10px"}} className="settings_fields_wrapper">
         {this.renderBanner}
-        <div style={{display: "flex"}}>
-          <NumericInput className="form-control" style={ false } placeholder="Mortgage Minimum" onChange={(e) => this.mortMin(e, "mortgage", "min")} value={this.state.ranges.mortgage.min}/>
-          <NumericInput className="form-control" style={ false } placeholder="Mortgage Maximum" onChange={(e) => this.mortMin(e, "mortgage", "max")}  value={this.state.ranges.mortgage.max}/>
+        <div style={{display: "flex"}} className="settings_fields">
+          <div style={{display: "flex", flexDirection: "column"}}>
+            <Typography id="label">Mortgage Min</Typography>
+            <NumericInput className="form-control" style={ false } placeholder="Mortgage Minimum" onChange={(e) => this.mortMin(e, "mortgage", "min")} value={this.state.ranges.mortgage.min}/>
+          </div>
+          <div style={{display: "flex", flexDirection: "column"}} className="settings_fields">
+            <Typography id="label">Mortgage Max</Typography>
+            <NumericInput className="form-control" style={ false } placeholder="Mortgage Maximum" onChange={(e) => this.mortMin(e, "mortgage", "max")}  value={this.state.ranges.mortgage.max}/>
+          </div>
         </div>
-        <div style={{display: "flex"}}>
-          <NumericInput className="form-control" style={ false } placeholder="Interest Rate Minimum" onChange={(e) => this.mortMin(e, "interest_rate", "min")}  value={this.state.ranges.interest_rate.min}/>
-          <NumericInput className="form-control" style={ false } placeholder="Interest Rate Maximum" onChange={(e) => this.mortMin(e, "interest_rate", "max")}  value={this.state.ranges.interest_rate.max}/>
+        <div style={{display: "flex"}} className="settings_fields">
+          <div style={{display: "flex", flexDirection: "column"}} className="settings_fields">
+            <Typography id="label">Interest Rate Min</Typography>
+            <NumericInput className="form-control" style={ false } placeholder="Interest Rate Minimum" onChange={(e) => this.mortMin(e, "interest_rate", "min")}  value={this.state.ranges.interest_rate.min}/>
+          </div>
+          <div style={{display: "flex", flexDirection: "column"}} className="settings_fields">
+            <Typography id="label">Interest Rate Max</Typography>
+            <NumericInput className="form-control" style={ false } placeholder="Interest Rate Maximum" onChange={(e) => this.mortMin(e, "interest_rate", "max")}  value={this.state.ranges.interest_rate.max}/>
+          </div>
         </div>
-        <div style={{display: "flex"}}>
-          <NumericInput className="form-control" style={ false } placeholder="Property Tax Minimum" onChange={(e) => this.mortMin(e, "taxes", "min")}  value={this.state.ranges.taxes.min}/>
-          <NumericInput className="form-control" style={ false } placeholder="Property Tax Maximum" onChange={(e) => this.mortMin(e, "taxes", "max")}  value={this.state.ranges.taxes.max}/>
+        <div style={{display: "flex"}} className="settings_fields">
+          <div style={{display: "flex", flexDirection: "column"}} className="settings_fields">
+            <Typography id="label">Taxes Min</Typography>
+            <NumericInput className="form-control" style={ false } placeholder="Property Tax Minimum" onChange={(e) => this.mortMin(e, "taxes", "min")}  value={this.state.ranges.taxes.min}/>
+          </div>
+          <div style={{display: "flex", flexDirection: "column"}} className="settings_fields">
+            <Typography id="label">Taxes Max</Typography>
+            <NumericInput className="form-control" style={ false } placeholder="Property Tax Maximum" onChange={(e) => this.mortMin(e, "taxes", "max")}  value={this.state.ranges.taxes.max}/>
+          </div>
         </div>
-        <div style={{display: "flex"}}>
+        <div style={{display: "flex"}} className="settings_concessions">
           <ToggleSwitch change={this.concessionHandler}
                         isChecked={this.state.concessions.include}/>
           <NumericInput className="form-control" style={ false } placeholder="Concession Percentage"/>
         </div>
-        <div style={{display: "flex"}}>
+        <div style={{display: "flex"}} className="settings_buttons">
           <Button bsStyle="primary" onClick={this.doneHandler}>Save</Button>
           <Button onClick={this.props.cancel}>Cancel</Button>
         </div>

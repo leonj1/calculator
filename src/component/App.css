@@ -32,3 +32,21 @@
 .affordability-calculator {
   padding: 10px 0px 10px 20px;
 }
+
+.settings_buttons {
+  background-color: #858694;
+  padding: 10px 0 10px 0;
+}
+
+.settings_concessions {
+  background-color: #F5914E;
+  padding: 10px 0 10px 0;
+}
+
+.settings_fields_wrapper {
+  background-color: #e0e0e0;
+}
+
+.settings_fields {
+  padding: 0 0 5px 5px;
+}
