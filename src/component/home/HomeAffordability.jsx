@@ -8,12 +8,12 @@ class HomeAffordability extends Component {
     this.state = {
       ranges: {
         mortgage: {
-          min: 100000,
-          max: 300000
+          min: 500000,
+          max: 700000
         },
         interest_rate: {
           min: 2.1,
-          max: 5.0
+          max: 4.5
         },
         taxes: {
           min: 4000,

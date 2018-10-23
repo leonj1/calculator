@@ -7,21 +7,41 @@ import './index.css';
 import registerServiceWorker from './registerServiceWorker';
 import { createStore, compose, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
-import { START_CREATE_SECRET, FAILED_CREATE_SECRET, SUCCESS_CREATE_SECRET, START_FETCH_SECRET, FAILED_FETCH_SECRET, SUCCESS_FETCH_SECRET, CLEAR_PREVIOUS_REQUEST } from './redux/actions';
+import {
+  SET_MORTGAGE_MIN, SET_MORTGAGE_MAX, SET_MORTGAGE, SET_INTEREST_RATE, SET_INTEREST_RATE_MIN, SET_INTEREST_RATE_MAX,
+  SET_TAXES_MIN, SET_TAXES_MAX, SET_TAXES
+} from './redux/actions';
 import createSagaMiddleware from 'redux-saga';
 import rootSaga from './sagas/apiSaga';
+import _ from 'lodash';
 
 const initialState = {
-  secret: {
-    message: "",
-    expiryMinutes: 60,
-    password: ""
+  ranges: {
+    mortgage: {
+      min: 100000,
+      max: 300000,
+      value: 200000,
+    },
+    interest_rate: {
+      min: 2.1,
+      max: 5.0,
+      value: 200000,
+    },
+    taxes: {
+      min: 4000,
+      max: 20000,
+      value: 200000,
+    }
   },
-  token: "",
-  request: {
-    status: 200,
-    reason: ""
-  }
+  net_income: 0,
+  net_expenses: 0,
+  concessions: {
+    include: false,
+    percentage: 0.6
+  },
+  down_payment: 0,
+  initialized: false,
+  show_settings: true,
 };
 
 // reducers
@@ -38,53 +58,77 @@ function startFetchingSecret(action) {
 // Actions the store should perform when an action is received
 const myReducer = (state = initialState, action) => {
   switch (action.type) {
-    case START_CREATE_SECRET:
+    case SET_MORTGAGE_MIN:
+      let path = [action.payload.parent] + '.min';
+      let _ranges = this.state.ranges;
+      _.update(_ranges, path, function(n) { return action.payload.val; });
       return {
         ...state,
-        secret: startCreatingSecret(action),
+        ranges: _ranges,
       };
-    case FAILED_CREATE_SECRET:
+    case SET_MORTGAGE_MAX:
+      path = [action.payload.parent] + '.max';
+      _ranges = this.state.ranges;
+      _.update(_ranges, path, function(n) { return action.payload.val; });
       return {
         ...state,
-        secret: failedCreatingSecret(action),
+        ranges: _ranges,
       };
-    case SUCCESS_CREATE_SECRET:
+    case SET_MORTGAGE:
+      path = [action.payload.parent] + '.value';
+      _ranges = this.state.ranges;
+      _.update(_ranges, path, function(n) { return action.payload.val; });
       return {
         ...state,
-        token: action.token,
-        secret: {
-          message: "",
-          expiryMinutes: 60,
-          password: ""
-        }
+        ranges: _ranges,
       };
-    case START_FETCH_SECRET:
+    case SET_INTEREST_RATE_MIN:
+      path = [action.payload.parent] + '.min';
+      _ranges = this.state.ranges;
+      _.update(_ranges, path, function(n) { return action.payload.val; });
       return {
         ...state,
-        token: startFetchingSecret(action),
+        ranges: _ranges,
       };
-    case FAILED_FETCH_SECRET:
+    case SET_INTEREST_RATE_MAX:
+      path = [action.payload.parent] + '.max';
+      _ranges = this.state.ranges;
+      _.update(_ranges, path, function(n) { return action.payload.val; });
       return {
         ...state,
-        request: action.request,
-        secret: {
-          message: "",
-          expiryMinutes: 60,
-          password: ""
-        }
+        ranges: _ranges,
       };
-    case SUCCESS_FETCH_SECRET:
+    case SET_INTEREST_RATE:
+      path = [action.payload.parent] + '.value';
+      _ranges = this.state.ranges;
+      _.update(_ranges, path, function(n) { return action.payload.val; });
       return {
         ...state,
-        secret: {
-          message: action.payload.contents
-        },
-        request: action.payload.request
+        ranges: _ranges,
       };
-    case CLEAR_PREVIOUS_REQUEST:
+    case SET_TAXES_MIN:
+      path = [action.payload.parent] + '.min';
+      _ranges = this.state.ranges;
+      _.update(_ranges, path, function(n) { return action.payload.val; });
       return {
         ...state,
-        request: action.payload
+        ranges: _ranges,
+      };
+    case SET_TAXES_MAX:
+      path = [action.payload.parent] + '.max';
+      _ranges = this.state.ranges;
+      _.update(_ranges, path, function(n) { return action.payload.val; });
+      return {
+        ...state,
+        ranges: _ranges,
+      };
+    case SET_TAXES:
+      path = [action.payload.parent] + '.value';
+      _ranges = this.state.ranges;
+      _.update(_ranges, path, function(n) { return action.payload.val; });
+      return {
+        ...state,
+        ranges: _ranges,
       };
     default:
       return state;
@@ -107,8 +151,6 @@ const store = createStore(
 );
 
 sagaMiddleware.run(rootSaga);
-
-// ReactDOM.render(<App />, document.getElementById("root"));
 
 ReactDOM.render(
   <Provider store={store}>

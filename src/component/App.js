@@ -7,7 +7,12 @@ import {
   Route,
   Link
 } from 'react-router-dom';
-import { submitSecret, fetchSecret, clearPastRequest } from '../redux/actions';
+import {
+  setValue,
+  SET_MORTGAGE_MIN,
+  SET_MORTGAGE_MAX,
+  SET_MORTGAGE
+} from '../redux/actions';
 import { Navbar, NavItem, Nav } from 'react-bootstrap';
 import BasicCalculator from './BasicCalculator';
 import CalculatorChoices from "./CalculatorChoices";
@@ -59,23 +64,39 @@ class App extends Component {
 
 const mapStateToProps = state => {
   return {
-    secret: state.secret,
-    token: state.token,
-    request: state.request
+    ranges: state.ranges,
   }
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    createSecretProp: function(secret) {
-      dispatch(submitSecret(secret));
+    setMortgageMin: function(val) {
+      dispatch(setValue(SET_MORTGAGE_MIN, "mortgage", val));
     },
-    fetchSecretProp: function(token) {
-      dispatch(fetchSecret(token));
+    setMortgageMax: function(val) {
+      dispatch(setValue(SET_MORTGAGE_MAX, "mortgage", val));
     },
-    clearPastRequest: function() {
-      dispatch(clearPastRequest());
-    }
+    setMortgage: function(val) {
+      dispatch(setValue(SET_MORTGAGE, "mortgage", val));
+    },
+    setInterestRateMin: function(val) {
+      dispatch(setValue(SET_MORTGAGE_MIN, "interest_rate", val));
+    },
+    setInterestRateMax: function(val) {
+      dispatch(setValue(SET_MORTGAGE_MAX, "interest_rate", val));
+    },
+    setInterestRate: function(val) {
+      dispatch(setValue(SET_MORTGAGE, "interest_rate", val));
+    },
+    setTaxesMin: function(val) {
+      dispatch(setValue(SET_MORTGAGE_MIN, "taxes", val));
+    },
+    setTaxesMax: function(val) {
+      dispatch(setValue(SET_MORTGAGE_MAX, "taxes", val));
+    },
+    setTaxes: function(val) {
+      dispatch(setValue(SET_MORTGAGE, "taxes", val));
+    },
   }
 };
 

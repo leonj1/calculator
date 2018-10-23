@@ -1,9 +1,6 @@
 import React, {Component} from 'react';
 import {Button} from 'react-bootstrap';
-import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import Slider from '@material-ui/lab/Slider';
-import ToggleSwitch from "../ToggleSwitch";
 import NumericInput from 'react-numeric-input';
 import PropTypes from 'prop-types';
 import Range from "../Range";
@@ -16,7 +13,7 @@ class AffordabilityCalculator extends Component {
       mortgage: 0,
       interest_rate: 0,
       taxes: 0,
-      net_income: 4000,
+      net_income: 10000,
       net_expenses: 2000,
       concessions: {
         include: false,
@@ -54,14 +51,18 @@ class AffordabilityCalculator extends Component {
 
   calculateAffordability = function () {
     let _affordability_value = 0;
-    let M; //monthly mortgage payment
+    let monthly_mortgage_payment; //monthly mortgage payment
     let P = this.state.mortgage; //principle / initial amount borrowed
     let I = this.state.interest_rate / 100 / 12; //monthly interest rate
     // TODO input number of years of mortgage
     let N = 30 * 12; //number of payments months
-    M = this.monthlyPayment(P, N, I);
+    monthly_mortgage_payment = this.monthlyPayment(P, N, I);
     let monthly_taxes = this.state.taxes / 12;
-    _affordability_value = this.state.net_income - (this.state.net_expenses + M + monthly_taxes);
+    let total_expenses = this.state.net_expenses + monthly_mortgage_payment + monthly_taxes;
+    _affordability_value = this.state.net_income - total_expenses;
+    _affordability_value = Number(_affordability_value).toFixed(2);
+    // console.log("Income: " + this.state.net_income);
+    // console.log("Monthly Taxes: " + monthly_taxes + " Net Expenses: " + this.state.net_expenses + " Mortgage: " + monthly_mortgage_payment);
     this.setState({affordability_value: _affordability_value});
   };
 
@@ -73,9 +74,6 @@ class AffordabilityCalculator extends Component {
     let _mortgage = (this.props.ranges.mortgage.max + this.props.ranges.mortgage.min) / 2;
     let _interest_rate = (this.props.ranges.interest_rate.max + this.props.ranges.interest_rate.min) / 2;
     let _taxes = (this.props.ranges.taxes.max + this.props.ranges.taxes.min) / 2;
-    console.log("Min: " + this.props.ranges.mortgage.min);
-    console.log("Max: " + this.props.ranges.mortgage.max);
-    console.log("Mort: " + _mortgage);
     this.setState({
       mortgage: _mortgage,
       interest_rate: _interest_rate,
@@ -89,7 +87,7 @@ class AffordabilityCalculator extends Component {
 
   render() {
     return (
-      <div style={{padding: "10px"}}>
+      <div className="affordability-calculator">
         <Button onClick={this.showSettings}>Settings</Button>
         {this.renderBanner}
         <div>

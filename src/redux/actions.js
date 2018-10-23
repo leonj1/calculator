@@ -1,31 +1,19 @@
-export const START_CREATE_SECRET = 'START_CREATE_SECRET';
-export const FAILED_CREATE_SECRET = 'FAILED_CREATE_SECRET';
-export const SUCCESS_CREATE_SECRET = 'SUCCESS_CREATE_SECRET';
-export const START_FETCH_SECRET = 'START_FETCH_SECRET';
-export const FAILED_FETCH_SECRET = 'FAILED_FETCH_SECRET';
-export const SUCCESS_FETCH_SECRET = 'SUCCESS_FETCH_SECRET';
-export const CLEAR_PREVIOUS_REQUEST = 'CLEAR_PREVIOUS_REQUEST';
+export const SET_MORTGAGE_MIN = 'SET_MORTGAGE_MIN';
+export const SET_MORTGAGE_MAX = 'SET_MORTGAGE_MAX';
+export const SET_MORTGAGE = 'SET_MORTGAGE';
+export const SET_TAXES_MIN = 'SET_TAXES_MIN';
+export const SET_TAXES_MAX = 'SET_TAXES_MAX';
+export const SET_TAXES = 'SET_TAXES';
+export const SET_INTEREST_RATE_MIN = 'SET_INTEREST_RATE_MIN';
+export const SET_INTEREST_RATE_MAX = 'SET_INTEREST_RATE_MAX';
+export const SET_INTEREST_RATE = 'SET_INTEREST_RATE';
 
-export function submitSecret(secret) {
+export function setValue(type, parent, val) {
 	return {
-		type: START_CREATE_SECRET,
-		payload: secret
-	}
-}
-
-export function fetchSecret(token) {
-	return {
-		type: START_FETCH_SECRET,
-		payload: token
-	}
-}
-
-export function clearPastRequest() {
-	return {
-		type: CLEAR_PREVIOUS_REQUEST,
+		type: [type],
 		payload: {
-            status: 200,
-            reason: ""
-        }
+			val: val,
+			parent: parent,
+		}
 	}
 }
