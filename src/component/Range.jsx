@@ -14,7 +14,7 @@ class Range extends Component {
   render() {
     // console.log(this.props);
     return (
-      <div>
+      <div className="slider_wrapper">
         <input id="range" type="range"
                value={this.props.value}
                min={this.props.min}
@@ -22,7 +22,7 @@ class Range extends Component {
                step={this.props.step}
                onChange={this.updateRange}
         />
-        <span id="output">{this.props.value}</span>
+        <span className="slider_output">{this.props.value}</span>
       </div>
     )
   }
