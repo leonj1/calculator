@@ -6,6 +6,7 @@ import Slider from '@material-ui/lab/Slider';
 import ToggleSwitch from "../ToggleSwitch";
 import NumericInput from 'react-numeric-input';
 import PropTypes from 'prop-types';
+import Range from "../Range";
 
 class AffordabilityCalculator extends Component {
 
@@ -29,8 +30,8 @@ class AffordabilityCalculator extends Component {
     this.mortgageChangeHandler = this.mortgageChangeHandler.bind(this);
   }
 
-  mortgageChangeHandler = function() {
-
+  mortgageChangeHandler = function(prop, val) {
+    this.setState({ [prop]: val })
   };
 
   showSettings = function () {
@@ -70,33 +71,27 @@ class AffordabilityCalculator extends Component {
         <div>
           <div className="sliders">
             <Typography id="label">Mortgage</Typography>
-            <Slider
-              min={this.props.ranges.mortgage.min}
-              max={this.props.ranges.mortgage.max}
-              value={this.state.mortgage}
-              aria-labelledby="Mortgage"
-              onChange={this.mortgageChangeHandler}
-            />
+            <Range value={this.state.mortgage}
+                   min={this.props.ranges.mortgage.min}
+                   max={this.props.ranges.mortgage.max}
+                   step="1"
+                   updateRange={(e) => this.mortgageChangeHandler("mortgage", e)}/>
           </div>
           <div className="sliders">
             <Typography id="label">Taxes</Typography>
-            <Slider
-              min={this.props.ranges.taxes.min}
-              max={this.props.ranges.taxes.max}
-              value={this.state.taxes}
-              aria-labelledby="Taxes"
-              onChange={this.mortgageChangeHandler}
-            />
+            <Range value={this.state.taxes}
+                   min={this.props.ranges.taxes.min}
+                   max={this.props.ranges.taxes.max}
+                   step="1"
+                   updateRange={(e) => this.mortgageChangeHandler("taxes", e)}/>
           </div>
           <div className="sliders">
             <Typography id="label">Interest Rate</Typography>
-            <Slider
-              min={this.props.ranges.interest_rate.min}
-              max={this.props.ranges.interest_rate.max}
-              value={this.state.interest_rate}
-              aria-labelledby="Interest Rate"
-              onChange={this.mortgageChangeHandler}
-            />
+            <Range value={this.state.interest_rate}
+                   min={this.props.ranges.interest_rate.min}
+                   max={this.props.ranges.interest_rate.max}
+                   step="0.01"
+                   updateRange={(e) => this.mortgageChangeHandler("interest_rate", e)}/>
           </div>
         </div>
       </div>
