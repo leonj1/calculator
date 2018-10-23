@@ -64,7 +64,7 @@ class Settings extends Component {
 
   render() {
     return (
-      <div>
+      <div style={{padding: "10px"}}>
         {this.renderBanner}
         <div style={{display: "flex"}}>
           <NumericInput className="form-control" style={ false } placeholder="Mortgage Minimum" onChange={(e) => this.mortMin(e, "mortgage", "min")} value={this.state.ranges.mortgage.min}/>
