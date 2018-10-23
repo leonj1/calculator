@@ -20,6 +20,7 @@ class AffordabilityCalculator extends Component {
         percentage: 0.6
       },
       down_payment: 0,
+      down_payment_percent: .2,
       initialized: false,
       show_settings: true,
       affordability_value: 0,
@@ -27,6 +28,8 @@ class AffordabilityCalculator extends Component {
     // TODO toggle input of down payment percentage of mortgage vs dollar amount
     this.showSettings = this.showSettings.bind(this);
     this.mortgageChangeHandler = this.mortgageChangeHandler.bind(this);
+    this.updateDownPaymentDollarAmount = this.updateDownPaymentDollarAmount.bind(this);
+    this.updateDownPaymentPercent = this.updateDownPaymentPercent.bind(this);
   }
 
   mortgageChangeHandler = function(prop, val) {
@@ -52,7 +55,7 @@ class AffordabilityCalculator extends Component {
   calculateAffordability = function () {
     let _affordability_value = 0;
     let monthly_mortgage_payment; //monthly mortgage payment
-    let P = this.state.mortgage; //principle / initial amount borrowed
+    let P = this.state.mortgage - this.state.down_payment; //principle / initial amount borrowed
     let I = this.state.interest_rate / 100 / 12; //monthly interest rate
     // TODO input number of years of mortgage
     let N = 30 * 12; //number of payments months
@@ -70,14 +73,32 @@ class AffordabilityCalculator extends Component {
     return p * i * (Math.pow(1 + i, n)) / (Math.pow(1 + i, n) - 1);
   };
 
+  updateDownPaymentDollarAmount = function (val) {
+    let _percentage = val / this.state.mortgage;
+    this.setState({
+      down_payment: val,
+      down_payment_percent: _percentage.toFixed(3),
+    })
+  };
+
+  updateDownPaymentPercent = function (percent) {
+    let _amount = this.state.mortgage * percent;
+    this.setState({
+      down_payment: _amount,
+      down_payment_percent: percent,
+    })
+  };
+
   componentWillMount() {
     let _mortgage = (this.props.ranges.mortgage.max + this.props.ranges.mortgage.min) / 2;
     let _interest_rate = (this.props.ranges.interest_rate.max + this.props.ranges.interest_rate.min) / 2;
     let _taxes = (this.props.ranges.taxes.max + this.props.ranges.taxes.min) / 2;
+    let _amount = _mortgage * this.state.down_payment_percent;
     this.setState({
       mortgage: _mortgage,
       interest_rate: _interest_rate,
       taxes: _taxes,
+      down_payment: _amount,
     });
   }
 
@@ -115,6 +136,24 @@ class AffordabilityCalculator extends Component {
                    step="0.01"
                    updateRange={(e) => this.mortgageChangeHandler("interest_rate", e)}/>
           </div>
+          <div style={{display: "flex"}}>
+            <div>
+              <Typography id="label">Down Payment</Typography>
+              <NumericInput className="form-control"
+                            style={ false }
+                            placeholder="Down Payment Amount"
+                            onChange={(e) => this.updateDownPaymentDollarAmount(e)}
+                            value={this.state.down_payment}/>
+            </div>
+            <div>
+              <Typography id="label">Down Payment Percentage</Typography>
+              <NumericInput className="form-control"
+                            style={ false }
+                            placeholder="Down Payment Percent"
+                            onChange={(e) => this.updateDownPaymentPercent(e)}
+                            value={this.state.down_payment_percent}/>
+            </div>
+          </div>
           <div>
             <Typography id="label">Net Monthly Income</Typography>
             <NumericInput className="form-control"
@@ -122,8 +161,7 @@ class AffordabilityCalculator extends Component {
                           placeholder="Net Monthly Income"
                           onChange={(e) => this.mortgageChangeHandler("net_income", e)}
                           value={this.state.net_income}/>
-          </div>
-          <div>
+          </div>          <div>
             <Typography id="label">Net Monthly Expenses</Typography>
             <NumericInput className="form-control"
                           style={ false }
