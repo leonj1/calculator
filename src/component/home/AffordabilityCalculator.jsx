@@ -54,11 +54,22 @@ class AffordabilityCalculator extends Component {
 
   calculateAffordability = function () {
     let _affordability_value = 0;
-    _affordability_value = this.state.net_income - this.state.net_expenses;
+    let M; //monthly mortgage payment
+    let P = this.state.mortgage; //principle / initial amount borrowed
+    let I = this.state.interest_rate / 100 / 12; //monthly interest rate
+    // TODO input number of years of mortgage
+    let N = 30 * 12; //number of payments months
+    M = this.monthlyPayment(P, N, I);
+    let monthly_taxes = this.state.taxes / 12;
+    _affordability_value = this.state.net_income - (this.state.net_expenses + M + monthly_taxes);
     this.setState({affordability_value: _affordability_value});
   };
 
-  componentDidMount() {
+  monthlyPayment = function (p, n, i) {
+    return p * i * (Math.pow(1 + i, n)) / (Math.pow(1 + i, n) - 1);
+  };
+
+  componentWillMount() {
     let _mortgage = (this.props.ranges.mortgage.max + this.props.ranges.mortgage.min) / 2;
     let _interest_rate = (this.props.ranges.interest_rate.max + this.props.ranges.interest_rate.min) / 2;
     let _taxes = (this.props.ranges.taxes.max + this.props.ranges.taxes.min) / 2;
@@ -69,8 +80,12 @@ class AffordabilityCalculator extends Component {
       mortgage: _mortgage,
       interest_rate: _interest_rate,
       taxes: _taxes,
-    })
+    });
   }
+
+  componentDidMount() {
+    this.calculateAffordability();
+  };
 
   render() {
     return (
