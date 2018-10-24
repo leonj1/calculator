@@ -9,7 +9,7 @@
     "react-scripts": "^1.1.4"
   },
   "dependencies": {
-    "@material-ui/core": "^3.3.0",
+    "@material-ui/core": "^3.3.1",
     "@material-ui/lab": "^3.0.0-alpha.21",
     "antd": "^3.10.1",
     "axios": "^0.17.0",
