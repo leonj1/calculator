@@ -10,7 +10,7 @@
 }
 
 .home-affordability-calculator {
-  max-width: 400px;
+  max-width: 500px;
 }
 
 .component-button {
@@ -30,7 +30,7 @@
 }
 
 .affordability-calculator {
-  padding: 10px 20px 10px 20px;
+  padding: 10px 20px 20px 20px;
   background-color: #f9cc8d;
 }
 
@@ -55,4 +55,17 @@
 .warning_label {
   padding-left: 10px;
   color: red;
+}
+
+.toggle_switch_wrapper {
+  display: flex;
+  flex-direction: row;
+}
+
+.toggle_switch {
+  padding-left: 10px;
+}
+
+.navbar {
+  margin-bottom: 0;
 }

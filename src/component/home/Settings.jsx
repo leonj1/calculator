@@ -37,7 +37,6 @@ class Settings extends Component {
   }
 
   renderBanner() {
-    console.log("Banner: " + this.props.first_time);
     if(this.props.first_time) {
       return (
         <div>
@@ -113,10 +112,15 @@ class Settings extends Component {
             <NumericInput className="form-control" style={ false } placeholder="Property Tax Minimum" onChange={this.pmiHandler}  value={this.state.pmi_percent}/>
           </div>
         </div>
-        <div style={{display: "flex"}} className="settings_concessions">
+        <div style={{display: "flex", paddingLeft: "10px"}} className="settings_concessions">
           <ToggleSwitch change={this.concessionHandler}
+                        label="Are you using a seller's concession?"
+                        value={this.state.concessions.percentage}
                         isChecked={this.state.concessions.include}/>
-          <NumericInput className="form-control" style={ false } placeholder="Concession Percentage"/>
+          <div style={{display: "flex", flexDirection: "column", paddingLeft: "10px"}}>
+            <Typography id="label">Are you going to use a seller's concession?</Typography>
+            <NumericInput className="form-control" style={ false } placeholder="Concession Percentage"/>
+          </div>
         </div>
         <div style={{display: "flex"}} className="settings_buttons">
           <Button bsStyle="primary" onClick={this.doneHandler}>Save</Button>

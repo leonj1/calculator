@@ -17,11 +17,13 @@ class ToggleSwitch extends Component {
     return(
       <div className="switch-container">
         <label>
-          <input ref="switch" checked={ this.state.isChecked } onChange={ this._handleChange } className="switch" type="checkbox" />
-          <div>
-            <span><g className="icon icon-toolbar grid-view"></g></span>
-            <span><g className="icon icon-toolbar ticket-view"></g></span>
-            <div></div>
+          <div className="toggle_switch_wrapper">
+            <input ref="switch"
+                   checked={ this.state.isChecked }
+                   onChange={ this._handleChange }
+                   className="toggle_switch"
+                   value={this.props.value}
+                   type="checkbox" />
           </div>
         </label>
       </div>
