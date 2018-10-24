@@ -13,17 +13,19 @@ class AffordabilityCalculator extends Component {
       mortgage: 0,
       interest_rate: 0,
       taxes: 0,
-      net_income: 10000,
-      net_expenses: 2000,
+      net_income: 4000,
+      net_expenses: 1000,
       concessions: {
         include: false,
         percentage: 0.6
       },
+      pmi_percent: 1.0,
       down_payment: 0,
       down_payment_percent: .2,
       initialized: false,
       show_settings: true,
       affordability_value: 0,
+      affordability_color: 'black',
     };
     // TODO toggle input of down payment percentage of mortgage vs dollar amount
     this.showSettings = this.showSettings.bind(this);
@@ -52,6 +54,16 @@ class AffordabilityCalculator extends Component {
     }
   };
 
+  renderWarnings = function() {
+    if(this.state.down_payment_percent < 0.2) {
+      return (
+        <div>
+          <span className="warning_label">* Down payment is less than standard 20% PMI being added!</span>
+        </div>
+      )
+    }
+  };
+
   calculateAffordability = function () {
     let _affordability_value = 0;
     let monthly_mortgage_payment; //monthly mortgage payment
@@ -60,13 +72,24 @@ class AffordabilityCalculator extends Component {
     // TODO input number of years of mortgage
     let N = 30 * 12; //number of payments months
     monthly_mortgage_payment = this.monthlyPayment(P, N, I);
+    let _pmi_amount = 0;
+    if (this.state.pmi_percent < 0.2) {
+      _pmi_amount = this.state.pmi_percent * this.state.mortgage;
+    }
     let monthly_taxes = this.state.taxes / 12;
-    let total_expenses = this.state.net_expenses + monthly_mortgage_payment + monthly_taxes;
+    let total_expenses = this.state.net_expenses + monthly_mortgage_payment + monthly_taxes + _pmi_amount;
     _affordability_value = this.state.net_income - total_expenses;
     _affordability_value = Number(_affordability_value).toFixed(2);
     // console.log("Income: " + this.state.net_income);
     // console.log("Monthly Taxes: " + monthly_taxes + " Net Expenses: " + this.state.net_expenses + " Mortgage: " + monthly_mortgage_payment);
-    this.setState({affordability_value: _affordability_value});
+    let _affordability_color = 'black';
+    if (_affordability_value < 1) {
+      _affordability_color = 'red';
+    }
+    this.setState({
+      affordability_value: _affordability_value,
+      affordability_color: _affordability_color,
+    });
   };
 
   monthlyPayment = function (p, n, i) {
@@ -78,7 +101,8 @@ class AffordabilityCalculator extends Component {
     this.setState({
       down_payment: val,
       down_payment_percent: _percentage.toFixed(3),
-    })
+    });
+    this.calculateAffordability();
   };
 
   updateDownPaymentPercent = function (percent) {
@@ -86,7 +110,8 @@ class AffordabilityCalculator extends Component {
     this.setState({
       down_payment: _amount,
       down_payment_percent: percent,
-    })
+    });
+    this.calculateAffordability();
   };
 
   componentWillMount() {
@@ -99,6 +124,7 @@ class AffordabilityCalculator extends Component {
       interest_rate: _interest_rate,
       taxes: _taxes,
       down_payment: _amount,
+      pmi_percent: this.props.pmi_percent,
     });
   }
 
@@ -172,11 +198,16 @@ class AffordabilityCalculator extends Component {
           <div>
             <Typography id="label">Affordability</Typography>
             <NumericInput className="form-control"
-                          style={ false }
                           placeholder="Affordability"
+                          style={{
+                            input: {
+                              color: this.state.affordability_color
+                            }
+                          }}
                           value={this.state.affordability_value}/>
           </div>
         </div>
+        {this.renderWarnings()}
       </div>
     )
   }
@@ -205,7 +236,8 @@ AffordabilityCalculator.PropTypes = {
   concessions: PropTypes.shape({
     include: PropTypes.bool.isRequired,
     percentage: PropTypes.number.isRequired,
-  })
+  }),
+  pmi_percent: PropTypes.number.isRequired,
 };
 
 export default AffordabilityCalculator;

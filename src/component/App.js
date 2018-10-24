@@ -40,9 +40,6 @@ class App extends Component {
                 <NavItem eventKey={1} href="/home">
                   <Link to="home" className="NavBar-Item">Home Affordability</Link>
                 </NavItem>
-                <NavItem eventKey={2} href="/car/">
-                  <Link to="car" className="NavBar-Item">Car Loan</Link>
-                </NavItem>
                 <NavItem eventKey={2} href="/calculator/">
                   <Link to="calculator" className="NavBar-Item">Basic Calculator</Link>
                 </NavItem>
@@ -52,7 +49,6 @@ class App extends Component {
 
           <Route exact path="/" render={(props) => ( <CalculatorChoices/> )}/>
           <Route path="/home/" render={(props) => (<HomeAffordability/> )}/>
-          <Route path="/car/" render={(props) => (<div>car</div> )}/>
           <Route path="/calculator/" render={(props) => (<BasicCalculator/>)}/>
 
         </div>

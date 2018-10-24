@@ -27,21 +27,31 @@ class Settings extends Component {
         include: false,
         percentage: 0.6
       },
+      pmi_percent: 1.0
     };
     this.doneHandler = this.doneHandler.bind(this);
     this.concessionHandler = this.concessionHandler.bind(this);
     this.doneHandler = this.doneHandler.bind(this);
     this.mortMin = this.mortMin.bind(this);
+    this.pmiHandler = this.pmiHandler.bind(this);
   }
 
-  renderBanner = function() {
+  renderBanner() {
+    console.log("Banner: " + this.props.first_time);
     if(this.props.first_time) {
       return (
         <div>
-          <p>Here is where you set the max and min values that are going to be used to help you quickly determine if you can afford that home with that mortgage.</p>
+          <p>
+            Here is where you set minimum and maximum values of what price range you are looking at.
+            You can always return here to change them if needed. Click save to see it in action!
+          </p>
         </div>
       )
     }
+  };
+
+  pmiHandler = function(value) {
+    this.setState({pmi_percent: value});
   };
 
   concessionHandler = function(value) {
@@ -49,7 +59,7 @@ class Settings extends Component {
   };
 
   doneHandler = function() {
-    this.props.done(this.state.ranges, this.state.concessions);
+    this.props.done(this.state.ranges, this.state.concessions, this.state.pmi_percent);
   };
 
   mortMin = function (val, parent, prop) {
@@ -66,7 +76,7 @@ class Settings extends Component {
   render() {
     return (
       <div style={{padding: "10px"}} className="settings_fields_wrapper">
-        {this.renderBanner}
+        {this.renderBanner()}
         <div style={{display: "flex"}} className="settings_fields">
           <div style={{display: "flex", flexDirection: "column"}}>
             <Typography id="label">Mortgage Min</Typography>
@@ -95,6 +105,12 @@ class Settings extends Component {
           <div style={{display: "flex", flexDirection: "column"}} className="settings_fields">
             <Typography id="label">Taxes Max</Typography>
             <NumericInput className="form-control" style={ false } placeholder="Property Tax Maximum" onChange={(e) => this.mortMin(e, "taxes", "max")}  value={this.state.ranges.taxes.max}/>
+          </div>
+        </div>
+        <div style={{display: "flex"}} className="settings_fields">
+          <div style={{display: "flex", flexDirection: "column"}} className="settings_fields">
+            <Typography id="label">PMI Percent</Typography>
+            <NumericInput className="form-control" style={ false } placeholder="Property Tax Minimum" onChange={this.pmiHandler}  value={this.state.pmi_percent}/>
           </div>
         </div>
         <div style={{display: "flex"}} className="settings_concessions">

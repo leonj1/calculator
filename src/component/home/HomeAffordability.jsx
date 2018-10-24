@@ -8,8 +8,8 @@ class HomeAffordability extends Component {
     this.state = {
       ranges: {
         mortgage: {
-          min: 500000,
-          max: 700000
+          min: 200000,
+          max: 300000
         },
         interest_rate: {
           min: 2.1,
@@ -17,7 +17,7 @@ class HomeAffordability extends Component {
         },
         taxes: {
           min: 4000,
-          max: 20000
+          max: 10000
         }
       },
       net_income: 0,
@@ -27,20 +27,22 @@ class HomeAffordability extends Component {
         percentage: 0.6
       },
       down_payment: 0,
-      initialized: false,
+      first_time: true,
       show_settings: true,
+      pmi_percent: 1.0,
     };
     this.doneSettingsHandler = this.doneSettingsHandler.bind(this);
     this.cancelSettingsHandler = this.cancelSettingsHandler.bind(this);
     this.showSettingsHandler = this.showSettingsHandler.bind(this);
   }
 
-  doneSettingsHandler = function(ranges, concessions) {
+  doneSettingsHandler = function(ranges, concessions, pmi_percent) {
     this.setState({
       ranges: ranges,
       concessions: concessions,
       initialized: true,
-      show_settings: false
+      show_settings: false,
+      pmi_percent: pmi_percent,
     })
   };
 
@@ -56,7 +58,7 @@ class HomeAffordability extends Component {
     return (
       <div className="home-affordability-calculator">
         {this.state.show_settings ? (
-          <Settings first_time={this.state.initialized}
+          <Settings first_time={this.state.first_time}
                     ranges={this.state.ranges}
                     concessions={this.state.concessions}
                     done={this.doneSettingsHandler}
@@ -68,6 +70,7 @@ class HomeAffordability extends Component {
                                     down_payment={this.state.down_payment}
                                     showSettingsHandler={this.showSettingsHandler}
                                     ranges={this.state.ranges}
+                                    pmi_percent={this.state.pmi_percent}
                                     concessions={this.state.concessions}/>
         )}
       </div>
