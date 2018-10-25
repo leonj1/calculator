@@ -3,8 +3,8 @@ import Display from "./Display";
 import ButtonPanel from "./ButtonPanel";
 import calculate from "../logic/calculate";
 import "./App.css";
-// import PropTypes from 'prop-types';
 import IdleTimer from 'react-idle-timer'
+import Room from "./room/Room";
 
 class BasicCalculator extends Component {
   constructor(props) {
@@ -14,6 +14,9 @@ class BasicCalculator extends Component {
       next: null,
       operation: null,
       openRoom: false,
+      timeoutSeconds: 60,
+      isIdle: false,
+      timeRemaining: 0,
     };
     this.idleTimer = null;
     this.onActive = this._onActive.bind(this);
@@ -37,8 +40,9 @@ class BasicCalculator extends Component {
             element={document}
             onActive={this.onActive}
             onIdle={this.onIdle}
-            timeout={1000 * 3}>
-            <div>Room</div>
+            timeout={1000 * this.state.timeoutSeconds}>
+            <Room isIdle={this.state.isIdle}
+                  timeRemaining={this.state.timeRemaining}/>
           </IdleTimer>
 
         ) : (
@@ -53,13 +57,14 @@ class BasicCalculator extends Component {
 
   _onActive(e) {
     console.log('user is active', e);
-    console.log('time remaining', this.idleTimer.getRemainingTime())
+    console.log('time remaining', this.idleTimer.getRemainingTime());
+    this.setState({isIdle: false, timeRemaining: this.idleTimer.getRemainingTime()});
   }
 
   _onIdle(e) {
     console.log('user is idle', e);
-    console.log('last active', this.idleTimer.getLastActiveTime())
-    this.setState({openRoom: false, next: 0});
+    console.log('last active', this.idleTimer.getLastActiveTime());
+    this.setState({openRoom: false, next: 0, isIdle: true, timeRemaining: this.idleTimer.getRemainingTime()});
   }
 
 };

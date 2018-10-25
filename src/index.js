@@ -8,8 +8,18 @@ import registerServiceWorker from './registerServiceWorker';
 import { createStore, compose, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import {
-  SET_MORTGAGE_MIN, SET_MORTGAGE_MAX, SET_MORTGAGE, SET_INTEREST_RATE, SET_INTEREST_RATE_MIN, SET_INTEREST_RATE_MAX,
-  SET_TAXES_MIN, SET_TAXES_MAX, SET_TAXES
+  SET_MORTGAGE_MIN,
+  SET_MORTGAGE_MAX,
+  SET_MORTGAGE,
+  SET_INTEREST_RATE,
+  SET_INTEREST_RATE_MIN,
+  SET_INTEREST_RATE_MAX,
+  SET_TAXES_MIN,
+  SET_TAXES_MAX,
+  SET_TAXES,
+  TEXT_MESSAGE,
+  USER_JOINED,
+  USER_LEFT
 } from './redux/actions';
 import createSagaMiddleware from 'redux-saga';
 import rootSaga from './sagas/apiSaga';
@@ -42,18 +52,9 @@ const initialState = {
   down_payment: 0,
   initialized: false,
   show_settings: true,
+  messages: [],
+  users: [],
 };
-
-// reducers
-function startCreatingSecret(action) {
-  return action.payload;
-}
-function failedCreatingSecret(action) {
-  return action.payload;
-}
-function startFetchingSecret(action) {
-  return action.token;
-}
 
 // Actions the store should perform when an action is received
 const myReducer = (state = initialState, action) => {
@@ -129,6 +130,26 @@ const myReducer = (state = initialState, action) => {
       return {
         ...state,
         ranges: _ranges,
+      };
+    case TEXT_MESSAGE:
+      console.log("Message in store: " + JSON.stringify(action.message));
+      return {
+        ...state,
+        messages: [...state.messages, action.message]
+      };
+    case USER_JOINED:
+      console.log("USER JOINED: " + JSON.stringify(action));
+      let us = action.users && action.users.length > 0 ? action.users : [];
+      return {
+        ...state,
+        users: us,
+      };
+    case USER_LEFT:
+      console.log("USER LEFT: " + JSON.stringify(action));
+      us = action.users && action.users.length > 0 ? action.users : [];
+      return {
+        ...state,
+        users: us,
       };
     default:
       return state;
