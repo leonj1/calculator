@@ -19,7 +19,9 @@ import {
   SET_TAXES,
   TEXT_MESSAGE,
   USER_JOINED,
-  USER_LEFT
+  USER_LEFT,
+  RAISE_TOAST,
+  CLOSE_TOAST
 } from './redux/actions';
 import createSagaMiddleware from 'redux-saga';
 import rootSaga from './sagas/apiSaga';
@@ -54,6 +56,12 @@ const initialState = {
   show_settings: true,
   messages: [],
   users: [],
+  toast: {
+    show: false,
+    contents: "",
+    duration: 2500,
+    color: "red"
+  }
 };
 
 // Actions the store should perform when an action is received
@@ -150,6 +158,16 @@ const myReducer = (state = initialState, action) => {
       return {
         ...state,
         users: us,
+      };
+    case RAISE_TOAST:
+      return {
+        ...state,
+        toast: action.toast,
+      };
+    case CLOSE_TOAST:
+      return {
+        ...state,
+        toast: action.toast,
       };
     default:
       return state;

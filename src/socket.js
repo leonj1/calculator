@@ -1,8 +1,8 @@
 
 const AppConfig = {
-    PROTOCOL: "ws://",
+    PROTOCOL: "wss://",
     // TODO: change to localhost if you wish to run it locally
-    HOST: "localhost",
+    HOST: "api.variouscalculators.com",
     PORT: ":9000"
 };
 
@@ -11,7 +11,7 @@ const Singleton = (function () {
 
     function createInstance() {
         // TODO: add +  PORT if you want to run it locally
-        return new WebSocket(AppConfig.PROTOCOL + AppConfig.HOST + AppConfig.PORT);
+        return new WebSocket(AppConfig.PROTOCOL + AppConfig.HOST);
     }
 
     return {

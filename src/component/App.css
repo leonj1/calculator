@@ -69,3 +69,20 @@
 .navbar {
   margin-bottom: 0;
 }
+
+/* MyToast */
+.my-toast {
+  width: 100%;
+  background-color: green;
+  min-height: 20px;
+  padding: 1px 10px 10px 10px;
+  margin-bottom: 10px;
+}
+
+.mytoast-show {
+  display: inherit;
+}
+
+.mytoast-hide {
+  display: none;
+}

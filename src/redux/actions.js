@@ -11,6 +11,8 @@ export const TEXT_MESSAGE = 'TEXT_MESSAGE';
 export const USER_JOINED = 'USER_JOINED';
 export const USER_LEFT = 'USER_LEFT';
 export const USER_JOINED_ACK = 'USER_JOINED_ACK';
+export const RAISE_TOAST = 'RAISE_TOAST';
+export const CLOSE_TOAST = 'CLOSE_TOAST';
 
 export function setValue(type, parent, val) {
 	return {
@@ -33,7 +35,6 @@ export function userJoined(users) {
 }
 
 export function userJoinedAck(thisUser) {
-  console.log("User login ack: " + thisUser);
   return {
     type: USER_JOINED_ACK,
     thisUser: thisUser
@@ -41,7 +42,6 @@ export function userJoinedAck(thisUser) {
 }
 
 export function userLeft(users) {
-  console.log("User left: " + users);
   return {
     type: USER_LEFT,
     users: users
@@ -49,9 +49,32 @@ export function userLeft(users) {
 }
 
 export function messageReceived(message) {
-  console.log("Message received: " + JSON.stringify(message));
   return {
     type: TEXT_MESSAGE,
     message: message
+  }
+}
+
+export function raiseToast(contents, duration, color) {
+  return {
+    type: RAISE_TOAST,
+    toast: {
+      show: true,
+      contents: contents,
+      duration: duration,
+      color: color
+    }
+  }
+}
+
+export function closeToast() {
+  return {
+    type: CLOSE_TOAST,
+    toast: {
+      show: false,
+      contents: '',
+      duration: 0,
+      color: "black"
+    }
   }
 }

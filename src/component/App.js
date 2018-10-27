@@ -1,22 +1,23 @@
 import React, { Component } from "react";
-import "./App.css";
-
 import { connect } from 'react-redux';
+import { Navbar, NavItem, Nav } from 'react-bootstrap';
+import BasicCalculator from './BasicCalculator';
+import CalculatorChoices from "./CalculatorChoices";
+import HomeAffordability from "./home/HomeAffordability";
+import MyToast from './MyToast';
 import {
   BrowserRouter as Router,
   Route,
   Link
 } from 'react-router-dom';
 import {
+  closeToast,
   setValue,
   SET_MORTGAGE_MIN,
   SET_MORTGAGE_MAX,
   SET_MORTGAGE
 } from '../redux/actions';
-import { Navbar, NavItem, Nav } from 'react-bootstrap';
-import BasicCalculator from './BasicCalculator';
-import CalculatorChoices from "./CalculatorChoices";
-import HomeAffordability from "./home/HomeAffordability";
+import "./App.css";
 
 class App extends Component {
   constructor(props) {
@@ -46,7 +47,13 @@ class App extends Component {
               </Nav>
             </Navbar.Collapse>
           </Navbar>
-
+          { (this.props.toast.show) ?
+            <MyToast duration={this.props.toast.duration}
+                     clazz={{backgroundColor: this.props.toast.color}}
+                     onClose={this.props.closeToast}>
+              <p>{this.props.toast.contents}</p>
+            </MyToast>
+            : null }
           <Route exact path="/" render={(props) => ( <CalculatorChoices/> )}/>
           <Route path="/home/" render={(props) => (<HomeAffordability/> )}/>
           <Route path="/calculator/" render={(props) => (<BasicCalculator/>)}/>
@@ -61,6 +68,7 @@ class App extends Component {
 const mapStateToProps = state => {
   return {
     ranges: state.ranges,
+    toast: state.toast,
   }
 };
 
@@ -92,6 +100,9 @@ const mapDispatchToProps = dispatch => {
     },
     setTaxes: function(val) {
       dispatch(setValue(SET_MORTGAGE, "taxes", val));
+    },
+    closeToast: function() {
+      dispatch(closeToast());
     },
   }
 };

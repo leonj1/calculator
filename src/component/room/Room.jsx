@@ -12,7 +12,7 @@ import {
   userJoined,
   userJoinedAck,
   userLeft,
-  messageReceived
+  messageReceived,
 } from '../../redux/actions';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
@@ -152,7 +152,7 @@ function mapDispatchToProps(dispatch, props) {
     userJoined: userJoined,
     userJoinedAck: userJoinedAck,
     userLeft: userLeft,
-    messageReceived: messageReceived
+    messageReceived: messageReceived,
   }, dispatch);
 }
 
