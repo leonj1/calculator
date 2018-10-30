@@ -166,7 +166,7 @@ class AffordabilityCalculator extends Component {
             <div>
               <Typography id="label">Down Payment</Typography>
               <NumericInput className="form-control"
-                            style={ false }
+                            style={ {} }
                             placeholder="Down Payment Amount"
                             onChange={(e) => this.updateDownPaymentDollarAmount(e)}
                             value={this.state.down_payment}/>
@@ -174,7 +174,7 @@ class AffordabilityCalculator extends Component {
             <div>
               <Typography id="label">Down Payment Percentage</Typography>
               <NumericInput className="form-control"
-                            style={ false }
+                            style={ {} }
                             placeholder="Down Payment Percent"
                             onChange={(e) => this.updateDownPaymentPercent(e)}
                             value={this.state.down_payment_percent}/>
@@ -183,14 +183,14 @@ class AffordabilityCalculator extends Component {
           <div>
             <Typography id="label">Net Monthly Income</Typography>
             <NumericInput className="form-control"
-                          style={ false }
+                          style={ {} }
                           placeholder="Net Monthly Income"
                           onChange={(e) => this.mortgageChangeHandler("net_income", e)}
                           value={this.state.net_income}/>
           </div>          <div>
             <Typography id="label">Net Monthly Expenses</Typography>
             <NumericInput className="form-control"
-                          style={ false }
+                          style={ {} }
                           placeholder="Net Monthly Expenses"
                           onChange={(e) => this.mortgageChangeHandler("net_expenses", e)}
                           value={this.state.net_expenses}/>

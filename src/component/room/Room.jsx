@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import UserList from './UserList/UserList';
-import Chat from './Chat/Chat';
-import Singleton from '../../socket';
-import MessageType from './Chat/SendMessage/MessageType';
 import Dialog from 'material-ui/Dialog';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
@@ -16,7 +13,8 @@ import {
 } from '../../redux/actions';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
-// import _ from 'lodash';
+import { USER_CONNECTED, LOGOUT } from '../../Events'
+import ChatContainer from './Chat/ChatContainer';
 
 class Room extends Component {
   constructor(props) {
@@ -30,57 +28,19 @@ class Room extends Component {
     }
   }
 
-  registerSocket() {
-    let self = this;
-    this.socket = Singleton.getInstance();
-
-    this.socket.onmessage = (response) => {
-      console.log("Socket Connection Opened");
-      let message = JSON.parse(response.data);
-      let users;
-
-      switch (message.type) {
-        case MessageType.TEXT_MESSAGE:
-          self.props.messageReceived(message);
-          break;
-        case MessageType.USER_JOINED:
-          users = JSON.parse(message.data);
-          self.props.userJoined(users);
-          break;
-        case MessageType.USER_LEFT:
-          users = JSON.parse(message.data);
-          self.props.userLeft(users);
-          break;
-        case MessageType.USER_JOINED_ACK:
-          let thisUser = message.user;
-          self.props.userJoinedAck(thisUser);
-          break;
-        default:
-      }
-    };
-
-    this.socket.onopen = () => {
-      console.log("Socket Connection Opened");
-      this.sendJoinedMessage();
-    };
-
-    window.onbeforeunload = () => {
-      let messageDto = JSON.stringify({ user: this.props.thisUser, type: MessageType.USER_LEFT });
-      this.socket.send(messageDto);
-    }
-  }
-
-  sendJoinedMessage() {
-    let messageDto = JSON.stringify({ user: this.state.usernameInput, type: MessageType.USER_JOINED });
-    this.socket.send(messageDto);
-  }
+  /*
+  *	Sets the user property in state to null.
+  */
+  logout = () => {
+    this.props.socket.emit(LOGOUT);
+  };
 
   onChooseName() {
-    this.registerSocket();
     this.setState({ modalOpen: false });
   }
 
   updateInputValue(value) {
+    this.props.socket.emit(USER_CONNECTED, value);
     this.setState({ usernameInput: value });
   }
 
@@ -105,12 +65,13 @@ class Room extends Component {
 
     const chat = this.state.modalOpen ? ''
       :
-      <Chat messages={this.props.messages}
-            thisUser={this.state.usernameInput}/>;
+      <ChatContainer socket={this.props.socket}
+                     user={this.state.usernameInput}
+                     logout={this.logout}/>;
 
     return(
       <MuiThemeProvider>
-        <div className="App">
+        <div className="container">
           <UserList users={this.state.users} />
           {chat}
           <Dialog
