@@ -1,14 +1,10 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import Display from "./Display";
 import ButtonPanel from "./ButtonPanel";
 import calculate from "../logic/calculate";
 import "./App.css";
 import IdleTimer from 'react-idle-timer'
 import Room from "./room/Room";
-import { TIMED_OUT } from '../Events';
-import io from 'socket.io-client';
-
-const socketUrl = "chat.variouscalculators.com:6767";
 
 class BasicCalculator extends Component {
   constructor(props) {
@@ -21,7 +17,6 @@ class BasicCalculator extends Component {
       timeoutSeconds: 60,
       isIdle: false,
       timeRemaining: 0,
-      socket: null,
     };
     this.idleTimer = null;
     this.onActive = this._onActive.bind(this);
@@ -32,26 +27,9 @@ class BasicCalculator extends Component {
     // src: https://www.npmjs.com/package/react-idle-timer
   }
 
-  handleClick = buttonName => {
+  handleCalculatorButtonClick = buttonName => {
     let _nextState = calculate(this.state, buttonName);
-    let _socket = null;
-    if(_nextState && _nextState.openRoom) {
-      _socket = this.initSocket();
-    }
-    _nextState.socket = _socket;
     this.setState(_nextState);
-  };
-
-  initSocket = () => {
-    console.log("Initializing connection");
-    let opts = {
-      path: "/ws"
-    };
-    const socket = io(socketUrl, opts);
-    socket.on('connect', ()=>{
-      console.log("Connected");
-    });
-    return socket;
   };
 
   render() {
@@ -65,14 +43,13 @@ class BasicCalculator extends Component {
             onIdle={this.onIdle}
             timeout={1000 * this.state.timeoutSeconds}>
             <Room isIdle={this.state.isIdle}
-                  socket={this.state.socket}
                   timeRemaining={this.state.timeRemaining}/>
           </IdleTimer>
 
         ) : (
           <div className="basic-calculator">
             <Display value={this.state.next || this.state.total || "0"} />
-            <ButtonPanel clickHandler={this.handleClick} />
+            <ButtonPanel clickHandler={this.handleCalculatorButtonClick} />
           </div>
         )}
       </div>
@@ -88,9 +65,7 @@ class BasicCalculator extends Component {
   _onIdle(e) {
     console.log('user is idle', e);
     console.log('last active', this.idleTimer.getLastActiveTime());
-    console.log("Closing socket connection");
-    const { socket } = this.state;
-    socket.emit(TIMED_OUT);
+    // TODO tell them we have timed out
     this.setState({openRoom: false, next: 0, isIdle: true, timeRemaining: this.idleTimer.getRemainingTime()});
   }
 }

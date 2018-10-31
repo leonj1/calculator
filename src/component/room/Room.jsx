@@ -1,19 +1,18 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import UserList from './UserList/UserList';
 import Dialog from 'material-ui/Dialog';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import {
-  userJoined,
-  userJoinedAck,
-  userLeft,
-  messageReceived,
+  sendMessageRequest,
+  loginRequest,
+  userLoggedOut,
+  fetchLatestMessages,
 } from '../../redux/actions';
-import { bindActionCreators } from 'redux';
+import {bindActionCreators} from 'redux';
 import PropTypes from 'prop-types';
-import { USER_CONNECTED, LOGOUT } from '../../Events'
+import {LOGOUT, USER_CONNECTED} from '../../Events'
 import ChatContainer from './Chat/ChatContainer';
 
 class Room extends Component {
@@ -21,7 +20,7 @@ class Room extends Component {
     super(props);
     this.state = {
       modalOpen: true,
-      usernameInput: '',
+      nickName: '',
       room: {
         capacity: 2,
       },
@@ -32,19 +31,18 @@ class Room extends Component {
   *	Sets the user property in state to null.
   */
   logout = () => {
-    this.props.socket.emit(LOGOUT);
+    this.props.userLoggedOut();
   };
 
   onChooseName() {
-    this.setState({ modalOpen: false });
+    this.props.loginRequest(this.state.nickName);
   }
 
-  updateInputValue(value) {
-    this.props.socket.emit(USER_CONNECTED, value);
-    this.setState({ usernameInput: value });
+  typingNickName(value) {
+    this.setState({ nickName: value });
   }
 
-  handleKeyPress = (event) => {
+  handleUserLogin = (event) => {
     if (event.key === 'Enter') {
       this.onChooseName();
     }
@@ -63,16 +61,16 @@ class Room extends Component {
       width: '600px'
     };
 
-    const chat = this.state.modalOpen ? ''
-      :
-      <ChatContainer socket={this.props.socket}
-                     user={this.state.usernameInput}
-                     logout={this.logout}/>;
+    const chat = this.props.userLoggedIn ?
+      <ChatContainer user={this.state.nickName}
+                     sendMessage={this.props.sendMessageRequest}
+                     refersh={this.props.fetchLatestMessages}
+                     logout={this.logout}/>
+      : '';
 
     return(
       <MuiThemeProvider>
         <div className="container">
-          <UserList users={this.state.users} />
           {chat}
           <Dialog
             title="Preferred nick name..."
@@ -83,9 +81,9 @@ class Room extends Component {
             <TextField
               autoFocus
               hintText="nick name..."
-              value={this.state.usernameInput}
-              onChange={(event) => this.updateInputValue(event.target.value)}
-              onKeyPress={this.handleKeyPress}
+              value={this.state.nickName}
+              onChange={(event) => this.typingNickName(event.target.value)}
+              onKeyPress={this.handleUserLogin}
             />
           </Dialog>
         </div>
@@ -100,20 +98,20 @@ Room.PropTypes = {
 };
 
 function mapStateToProps(state) {
-  console.log("Room State: " + JSON.stringify(state));
   return {
     messages: state.messages,
     users: state.users,
-    thisUser: state.thisUser
+    thisUser: state.thisUser,
+    userLoggedIn: state.userLoggedIn,
   }
 }
 
 function mapDispatchToProps(dispatch, props) {
   return bindActionCreators({
-    userJoined: userJoined,
-    userJoinedAck: userJoinedAck,
-    userLeft: userLeft,
-    messageReceived: messageReceived,
+    loginRequest: loginRequest,
+    userLoggedOut: userLoggedOut,
+    sendMessageRequest: sendMessageRequest,
+    fetchLatestMessages: fetchLatestMessages,
   }, dispatch);
 }
 

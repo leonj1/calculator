@@ -17,9 +17,6 @@ import {
   SET_TAXES_MIN,
   SET_TAXES_MAX,
   SET_TAXES,
-  TEXT_MESSAGE,
-  USER_JOINED,
-  USER_LEFT,
   RAISE_TOAST,
   CLOSE_TOAST
 } from './redux/actions';
@@ -54,13 +51,42 @@ const initialState = {
   down_payment: 0,
   initialized: false,
   show_settings: true,
-  messages: [],
-  users: [],
   toast: {
     show: false,
     contents: "",
     duration: 2500,
     color: "red"
+  },
+  room: {
+    exists: false,
+    roomId: 0,
+    request: {
+      status: 200,
+      text: ''
+    }
+  },
+  otherUser: {
+    status: '',
+    request: {
+      status: 200,
+      text: ''
+    }
+  },
+  user: {
+    loggedIn: false,
+    name: '',
+    token: '',
+    request: {
+      status: 200,
+      text: ''
+    }
+  },
+  messages: {
+    list: [],
+    request: {
+      status: 200,
+      text: ''
+    }
   }
 };
 
@@ -138,26 +164,6 @@ const myReducer = (state = initialState, action) => {
       return {
         ...state,
         ranges: _ranges,
-      };
-    case TEXT_MESSAGE:
-      console.log("Message in store: " + JSON.stringify(action.message));
-      return {
-        ...state,
-        messages: [...state.messages, action.message]
-      };
-    case USER_JOINED:
-      console.log("USER JOINED: " + JSON.stringify(action));
-      let us = action.users && action.users.length > 0 ? action.users : [];
-      return {
-        ...state,
-        users: us,
-      };
-    case USER_LEFT:
-      console.log("USER LEFT: " + JSON.stringify(action));
-      us = action.users && action.users.length > 0 ? action.users : [];
-      return {
-        ...state,
-        users: us,
       };
     case RAISE_TOAST:
       return {
