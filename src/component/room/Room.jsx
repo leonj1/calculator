@@ -12,7 +12,6 @@ import {
 } from '../../redux/actions';
 import {bindActionCreators} from 'redux';
 import PropTypes from 'prop-types';
-import {LOGOUT, USER_CONNECTED} from '../../Events'
 import ChatContainer from './Chat/ChatContainer';
 
 class Room extends Component {

@@ -5,6 +5,12 @@ import calculate from "../logic/calculate";
 import "./App.css";
 import IdleTimer from 'react-idle-timer'
 import Room from "./room/Room";
+import {connect} from 'react-redux';
+import {
+  checkRoomExists,
+  userTimedOut,
+} from '../redux/actions';
+import {bindActionCreators} from 'redux';
 
 class BasicCalculator extends Component {
   constructor(props) {
@@ -13,7 +19,6 @@ class BasicCalculator extends Component {
       total: null,
       next: null,
       operation: null,
-      openRoom: false,
       timeoutSeconds: 60,
       isIdle: false,
       timeRemaining: 0,
@@ -28,14 +33,15 @@ class BasicCalculator extends Component {
   }
 
   handleCalculatorButtonClick = buttonName => {
-    let _nextState = calculate(this.state, buttonName);
+    let _nextState = calculate(this.state, buttonName, this.props.checkRoomExists);
     this.setState(_nextState);
   };
 
   render() {
+    console.log("Room exists val: " + this.props.room.exists);
     return (
       <div className="component-app">
-        {this.state.openRoom ? (
+        {this.props.room.exists ? (
           <IdleTimer
             ref={ref => { this.idleTimer = ref }}
             element={document}
@@ -66,8 +72,26 @@ class BasicCalculator extends Component {
     console.log('user is idle', e);
     console.log('last active', this.idleTimer.getLastActiveTime());
     // TODO tell them we have timed out
-    this.setState({openRoom: false, next: 0, isIdle: true, timeRemaining: this.idleTimer.getRemainingTime()});
+    this.props.userTimedOut();
+    this.setState({next: 0, isIdle: true, timeRemaining: this.idleTimer.getRemainingTime()});
   }
 }
 
-export default BasicCalculator;
+function mapStateToProps(state) {
+  return {
+    room: state.room,
+  }
+}
+
+function mapDispatchToProps(dispatch, props) {
+  return bindActionCreators({
+    checkRoomExists: checkRoomExists,
+    userTimedOut: userTimedOut,
+  }, dispatch);
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(BasicCalculator);
+

@@ -18,7 +18,7 @@ import {
   SET_TAXES_MAX,
   SET_TAXES,
   RAISE_TOAST,
-  CLOSE_TOAST
+  CLOSE_TOAST, ROOM_EXISTS, ROOM_DOES_NOT_EXIST
 } from './redux/actions';
 import createSagaMiddleware from 'redux-saga';
 import rootSaga from './sagas/apiSaga';
@@ -174,6 +174,16 @@ const myReducer = (state = initialState, action) => {
       return {
         ...state,
         toast: action.toast,
+      };
+    case ROOM_EXISTS:
+      return {
+        ...state,
+        room: action.room,
+      };
+    case ROOM_DOES_NOT_EXIST:
+      return {
+        ...state,
+        room: action.room,
       };
     default:
       return state;

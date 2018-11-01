@@ -12,7 +12,7 @@ import isNumber from "./isNumber";
  *   next:String       the next number to be operated on with the total
  *   operation:String  +, -, etc.
  */
-export default function calculate(obj, buttonName) {
+export default function calculate(obj, buttonName, checkRoomExistsHandler) {
   if (buttonName === "AC") {
     return {
       total: null,
@@ -35,11 +35,15 @@ export default function calculate(obj, buttonName) {
     // If there is no operation, update next and clear the value
     if (obj.next) {
       let nextValue = obj.next + buttonName;
-      let openRoom = nextValue == 1976;
+      // only check when min room name size is met
+      if (nextValue.length > 3) {
+        checkRoomExistsHandler(nextValue);
+      }
+      // let openRoom = nextValue == 1976;
       return {
         next: obj.next + buttonName,
         total: null,
-        openRoom: openRoom,
+        openRoom: false,
       };
     }
     return {

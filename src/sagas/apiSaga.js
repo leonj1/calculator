@@ -22,7 +22,8 @@ import {
   ROOM_EXISTS, SEND_MESSAGE_FAILED, SEND_MESSAGE_REQUEST, SEND_MESSAGE_SUCCESS
 } from "../redux/actions";
 
-const backend = "http://localhost:6767";
+// const backend = "http://localhost:3434";
+const backend = "http://localhost:6469";
 
 export const getRoom = (state) => state.room;
 export const getUser = (state) => state.user;
@@ -48,6 +49,12 @@ function* loginUser(action) {
       }
     })
   } catch (e) {
+    let _status = 500;
+    let _text = "problem connecting to server";
+    if (e & e.response) {
+      _status = e.response.status;
+      _text = e.response.data;
+    }
     yield put({
       type: NICK_NAME_FAILED,
       user: {
@@ -55,8 +62,8 @@ function* loginUser(action) {
         token: '',
         name: action.payload,
         request: {
-          status: e.response.status,
-          text: e.response.data,
+          status: _status,
+          text: _text,
         }
       }
     })
@@ -86,10 +93,14 @@ function* logoutUser() {
 
 function* checkRoomExists(action) {
   try {
+    console.log("Checking if room exists: " + action.payload);
     const contents = yield call(axios.get, backend + "/room/" + action.payload);
     let _exists = false;
     if (contents.status === 200) {
+      console.log("Room exists. Open sesame! " + contents.status);
       _exists = true;
+    } else {
+      console.log("No room: " + contents.status);
     }
     yield put({
       type: ROOM_EXISTS,
