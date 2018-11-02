@@ -18,7 +18,7 @@ import {
   SET_TAXES_MAX,
   SET_TAXES,
   RAISE_TOAST,
-  CLOSE_TOAST, ROOM_EXISTS, ROOM_DOES_NOT_EXIST
+  CLOSE_TOAST, ROOM_EXISTS, ROOM_DOES_NOT_EXIST, NICK_NAME_FAILED, NICK_NAME_SUCCESS
 } from './redux/actions';
 import createSagaMiddleware from 'redux-saga';
 import rootSaga from './sagas/apiSaga';
@@ -184,6 +184,22 @@ const myReducer = (state = initialState, action) => {
       return {
         ...state,
         room: action.room,
+      };
+    case NICK_NAME_FAILED:
+      return {
+        ...state,
+        user: action.user,
+        toast: {
+          show: true,
+          contents: action.user.request.text,
+          duration: 2500,
+          color: "red"
+        },
+      };
+    case NICK_NAME_SUCCESS:
+      return {
+        ...state,
+        user: action.user,
       };
     default:
       return state;

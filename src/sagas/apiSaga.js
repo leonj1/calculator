@@ -32,7 +32,12 @@ export const getMessages = (state) => state.messages;
 
 function* loginUser(action) {
   try {
-    const contents = yield call(axios.post, backend + "/login/", action.payload);
+    console.log("Saga loginUser: " + backend + "/login/" + action.payload);
+    let room = yield select(getRoom);
+    let payload = {
+      name: action.payload
+    };
+    const contents = yield call(axios.post, backend + "/login/" + room.roomId, payload);
     let _loggedIn = contents.status === 200;
     let _token = contents.status === 200 ? contents.statusText : '';
     let _actionType = contents.status === 200 ? NICK_NAME_SUCCESS : NICK_NAME_FAILED;
